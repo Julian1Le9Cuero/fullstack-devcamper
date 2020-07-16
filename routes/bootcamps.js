@@ -21,7 +21,7 @@ const {
 router
   .route("/")
   .post(createBootcamp)
-  .get(advancedResults(Bootcamp), getBootcamps);
+  .get(advancedResults(Bootcamp, "courses"), getBootcamps);
 
 // Route: /api/v1/bootcamps/:id
 router
@@ -35,5 +35,9 @@ router.put("/:id/photo", uploadBootcampPhoto);
 
 // Route: /api/v1/bootcamps/radius/:zipcode/:distance
 router.get("/radius/:zipcode/:distance", getBootcampsByRadius);
+
+// Route: /api/v1/bootcamps/:bootcampId/courses
+// Redirect to the courses routes
+router.use("/:bootcampId/courses", require("./courses"));
 
 module.exports = router;

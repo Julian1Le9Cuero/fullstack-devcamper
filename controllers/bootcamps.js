@@ -5,7 +5,7 @@ const ErrorResponse = require("../utils/errorResponse");
 const path = require("path");
 
 // @desc Create new bootcamp
-// @route PORT /api/v1/bootcamps
+// @route POST /api/v1/bootcamps
 // @access Private
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
   const bootcamp = await Bootcamp.create(req.body);
