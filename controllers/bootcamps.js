@@ -84,12 +84,6 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
     runValidators: true,
   });
 
-  if (!bootcamp) {
-    return next(
-      new ErrorResponse(`Bootcamp not found with id ${req.params.id}`, 404)
-    );
-  }
-
   res.status(200).json({
     success: true,
     data: bootcamp,
@@ -100,8 +94,6 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 // @route PUT /api/v1/bootcamps/:id/photo
 // @access Private
 exports.uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findById(req.params.id);
-
   if (!req.files) {
     return next(new ErrorResponse("Please upload a file", 400));
   }
@@ -116,7 +108,7 @@ exports.uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("File size cannot be greater than 1MB", 400));
   }
 
-  const filename = `photo_${bootcamp._id}${path.extname(file.name)}`;
+  const filename = `photo_${res.resource._id}${path.extname(file.name)}`;
 
   file.mv(`${process.env.FILE_UPLOAD_PATH}/${filename}`, async (err) => {
     if (err) {
@@ -125,7 +117,7 @@ exports.uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
       );
     }
 
-    await Bootcamp.findByIdAndUpdate(bootcamp._id, { photo: filename });
+    await Bootcamp.findByIdAndUpdate(res.resource._id, { photo: filename });
 
     res.status(200).json({
       success: true,
@@ -138,9 +130,7 @@ exports.uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
 // @route DELETE /api/v1/bootcamps/:id
 // @access Private
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findById(req.params.id);
-
-  await bootcamp.remove();
+  await res.resource.remove();
 
   res.status(200).json({
     success: true,

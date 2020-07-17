@@ -4,6 +4,10 @@ const app = express();
 const dotenv = require("dotenv");
 const fileupload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
+const mongoSanitize = require("express-mongo-sanitize");
+const cors = require("cors");
+const xss = require("xss-clean");
+const helmet = require("helmet");
 
 // Load env vars
 dotenv.config({ path: path.join(__dirname, "config/config.env") });
@@ -24,6 +28,18 @@ app.use(cookieParser());
 // Enable file uploads
 app.use(fileupload());
 
+// Prevent NoSQL injections
+app.use(mongoSanitize());
+
+// Enable CORS
+app.use(cors());
+
+// Prevent XSS
+app.use(xss());
+
+// Secure app by using some http headers
+app.use(helmet());
+
 // Setup API routes
 // Bootcamps routes
 app.use("/api/v1/bootcamps", require("./routes/bootcamps"));
@@ -31,6 +47,10 @@ app.use("/api/v1/bootcamps", require("./routes/bootcamps"));
 app.use("/api/v1/courses", require("./routes/courses"));
 // Auth routes
 app.use("/api/v1/auth", require("./routes/auth"));
+// Users (admin) routes
+app.use("/api/v1/users", require("./routes/users"));
+// Reviews routes
+app.use("/api/v1/reviews", require("./routes/reviews"));
 
 // Custom error handling middleware
 const error = require("./middlewares/error");

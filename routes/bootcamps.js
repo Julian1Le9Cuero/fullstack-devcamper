@@ -58,4 +58,8 @@ router.get("/radius/:zipcode/:distance", getBootcampsByRadius);
 // Redirect to the courses routes
 router.use("/:bootcampId/courses", require("./courses"));
 
+// Route: /api/v1/bootcamps/:bootcampId/reviews
+// Redirect to the reviews routes
+router.use("/:bootcampId/reviews", require("./reviews"));
+
 module.exports = router;
