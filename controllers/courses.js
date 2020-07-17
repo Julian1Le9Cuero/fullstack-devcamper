@@ -15,7 +15,17 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
     );
   }
 
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== "admin") {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} with role '${req.user.role}' is not authorized to create a course for this bootcamp.`,
+        403
+      )
+    );
+  }
+
   req.body.bootcamp = bootcamp._id;
+  req.body.user = req.user.id;
 
   const course = await Course.create(req.body);
 

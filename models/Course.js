@@ -30,14 +30,19 @@ const CourseSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
   bootcamp: {
     type: mongoose.Types.ObjectId,
     ref: "Bootcamp",
     required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
 });
 
@@ -54,11 +59,17 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
         },
       },
     ]);
+    console.log(obj);
+    if (obj.length === 0) {
+      await this.model("Bootcamp").findByIdAndUpdate(bootcampId, {
+        averageCost: undefined,
+      });
+      return;
+    }
 
     await this.model("Bootcamp").findByIdAndUpdate(bootcampId, {
       averageCost: Math.round(obj[0].averageCost),
     });
-    console.log(obj);
   } catch (error) {
     console.error(error);
   }

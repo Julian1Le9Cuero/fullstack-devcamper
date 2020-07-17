@@ -8,6 +8,15 @@ const path = require("path");
 // @route POST /api/v1/bootcamps
 // @access Private
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
+  req.body.user = req.user.id;
+
+  // Only admins can add more than one bootcamp
+  const publishedBootcamp = await Bootcamp.findOne({ user: req.user.id });
+
+  if (publishedBootcamp && req.user.role !== "admin") {
+    return next(new ErrorResponse("User already added one bootcamp.", 400));
+  }
+
   const bootcamp = await Bootcamp.create(req.body);
 
   res.status(201).json({

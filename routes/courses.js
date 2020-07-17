@@ -5,6 +5,8 @@ const Course = require("../models/Course");
 
 // Middlewares
 const advancedResults = require("../middlewares/advancedResults");
+const { protect, authorize } = require("../middlewares/auth");
+const checkOwnership = require("../middlewares/checkOwnership");
 
 // Routes
 const {
@@ -19,7 +21,7 @@ const {
 // Route: /api/v1/courses
 router
   .route("/")
-  .post(createCourse)
+  .post(protect, authorize("admin", "publisher"), createCourse)
   .get(
     advancedResults(Course, {
       path: "bootcamp",
@@ -29,6 +31,20 @@ router
   );
 
 // Route: /api/v1/courses/:id
-router.route("/:id").get(getCourse).put(updateCourse).delete(deleteCourse);
+router
+  .route("/:id")
+  .get(getCourse)
+  .put(
+    protect,
+    authorize("admin", "publisher"),
+    checkOwnership(Course),
+    updateCourse
+  )
+  .delete(
+    protect,
+    authorize("admin", "publisher"),
+    checkOwnership(Course),
+    deleteCourse
+  );
 
 module.exports = router;

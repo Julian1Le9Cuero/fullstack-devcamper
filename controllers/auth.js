@@ -1,8 +1,9 @@
-const User = require("../models/User");
+const crypto = require("crypto");
 const asyncHandler = require("../middlewares/async");
+const User = require("../models/User");
 const ErrorResponse = require("../utils/errorResponse");
 const sendEmail = require("../utils/sendEmail");
-const crypto = require("crypto");
+const sendTokenResponse = require("../utils/sendTokenResponse");
 
 // @desc Register new user
 // @route POST /api/v1/auth/register
@@ -39,27 +40,6 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   sendTokenResponse(user, 200, res);
 });
-
-// Util function to send token in cookie
-const sendTokenResponse = (user, statusCode, res) => {
-  const token = user.generateAuthToken();
-
-  const options = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRE * 60 * 60 * 24 * 1000
-    ),
-    HttpOnly: true,
-  };
-
-  if (process.env.NODE_ENV === "production") {
-    options.secure = true;
-  }
-
-  res.status(statusCode).cookie("token", token, options).json({
-    success: true,
-    token,
-  });
-};
 
 // @desc Get auth user
 // @route GET /api/v1/auth/me
@@ -165,4 +145,85 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   await user.save();
 
   sendTokenResponse(user, 200, res);
+});
+
+// @desc Update user details
+// @route PATCH /api/v1/auth/me/updatedetails
+// @access Private
+exports.updateUserDetails = asyncHandler(async (req, res, next) => {
+  const { name, email } = req.body;
+
+  if (!name || !email) {
+    return next(
+      new ErrorResponse("Please provide the fields you want to update.", 400)
+    );
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    { name, email },
+    { new: true, runValidators: true }
+  );
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+// @desc Update user password
+// @route PATCH /api/v1/auth/me/updatepassword
+// @access Private
+exports.updateUserPassword = asyncHandler(async (req, res, next) => {
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    return next(
+      new ErrorResponse(
+        "Please provide your previous password and the new one.",
+        400
+      )
+    );
+  }
+
+  if (currentPassword === newPassword) {
+    return next(
+      new ErrorResponse(
+        "The previous password cannot be the same as the new one.",
+        400
+      )
+    );
+  }
+
+  const user = await User.findById(req.user.id).select("+password");
+
+  const isMatch = await user.matchPassword(currentPassword);
+
+  if (!isMatch) {
+    return next(new ErrorResponse("Invalid credentials.", 401));
+  }
+
+  user.password = newPassword;
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Password successfully changed.",
+  });
+});
+
+// @desc Logout
+// @route GET /api/v1/auth/logout
+// @access Private
+exports.logout = asyncHandler(async (req, res, next) => {
+  const options = {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  };
+
+  res.status(200).cookie("token", "none", options).json({
+    success: true,
+    data: {},
+  });
 });
