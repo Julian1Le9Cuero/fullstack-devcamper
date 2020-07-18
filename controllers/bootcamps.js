@@ -60,8 +60,8 @@ exports.getBootcampsByRadius = asyncHandler(async (req, res, next) => {
   const lon = loc[0].longitude;
   const lat = loc[0].latitude;
 
-  // Calculate earth radius in kilometers
-  const radius = parseInt(distance, 10) / 6378;
+  // Calculate earth radius in miles
+  const radius = parseInt(distance, 10) / 3963;
 
   // Search bootcamps
   const bootcamps = await Bootcamp.find({

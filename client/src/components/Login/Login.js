@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { login } from "../../redux/actions/auth";
 
+import Alert from "../Alert/Alert";
+
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: "",
@@ -25,12 +27,13 @@ const Login = ({ login, isAuthenticated }) => {
   if (isAuthenticated) {
     return <Redirect to="/bootcamps" />;
   }
+
   return (
     <section className="form mt-5">
       <div className="container">
         <div className="row">
           <div className="col-md-6 m-auto">
-            {/* Alert */}
+            <Alert />
             <div className="card bg-white p-4 mb-4">
               <div className="card-body">
                 <h1>
@@ -40,7 +43,7 @@ const Login = ({ login, isAuthenticated }) => {
                   Log in to list your bootcamp or rate, review and favorite
                   bootcamps
                 </p>
-                <form>
+                <form onSubmit={(e) => handleSubmit(e)}>
                   <div className="form-group">
                     <label htmlFor="email">Email Address</label>
                     <input
@@ -48,7 +51,8 @@ const Login = ({ login, isAuthenticated }) => {
                       name="email"
                       className="form-control"
                       placeholder="Enter email"
-                      required
+                      onChange={(e) => handleChange(e)}
+                      value={email}
                     />
                   </div>
                   <div className="form-group mb-4">
@@ -58,7 +62,8 @@ const Login = ({ login, isAuthenticated }) => {
                       name="password"
                       className="form-control"
                       placeholder="Enter password"
-                      required
+                      onChange={(e) => handleChange(e)}
+                      value={password}
                     />
                   </div>
                   <div className="form-group">

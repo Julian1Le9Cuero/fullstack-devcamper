@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Landing from "./components/Landing/Landing";
 import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
+import Bootcamps from "./components/Bootcamps/Bootcamps";
 
 import { loadUser } from "./redux/actions/auth";
 
@@ -29,6 +30,7 @@ class App extends React.Component {
             <Route path="/" exact component={Landing} />
             <Route path="/register" exact component={Register} />
             <Route path="/login" exact component={Login} />
+            <Route path="/bootcamps" exact component={Bootcamps} />
           </Switch>
         </BrowserRouter>
       </Provider>

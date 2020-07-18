@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 const Alert = ({ alerts }) => {
   return alerts.map((alert) => (
-    <div key={alert.id} class={`alert alert-${alert.type}`} role="alert">
+    <div key={alert.id} className={`alert alert-${alert.type}`} role="alert">
       {alert.message}
     </div>
   ));

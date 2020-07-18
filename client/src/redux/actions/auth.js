@@ -9,6 +9,8 @@ import {
 } from "./types";
 import setAuthToken from "../../utils/setAuthToken";
 
+import { createAlert } from "./alert";
+
 // Get current logged in user
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
@@ -48,6 +50,13 @@ export const register = (formData) => async (dispatch) => {
 
     dispatch(loadUser());
   } catch (error) {
+    if (error.response.data.message) {
+      const errors = error.response.data.message.split(",");
+      errors.forEach((errorMessage) =>
+        dispatch(createAlert(errorMessage, "danger"))
+      );
+    }
+
     dispatch({
       type: REGISTER_FAIL,
       payload: error,
@@ -73,6 +82,13 @@ export const login = (formData) => async (dispatch) => {
 
     dispatch(loadUser());
   } catch (error) {
+    if (error.response.data.message) {
+      const errors = error.response.data.message.split(",");
+      errors.forEach((errorMessage) =>
+        dispatch(createAlert(errorMessage, "danger"))
+      );
+    }
+
     dispatch({
       type: LOGIN_FAIL,
       payload: error,

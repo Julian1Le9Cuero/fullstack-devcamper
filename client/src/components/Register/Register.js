@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { register } from "../../redux/actions/auth";
 import { createAlert } from "../../redux/actions/alert";
+
+import Alert from "../Alert/Alert";
 
 const Register = ({ register, isAuthenticated, createAlert }) => {
   const [formData, setFormData] = useState({
@@ -12,7 +14,7 @@ const Register = ({ register, isAuthenticated, createAlert }) => {
     email: "",
     password: "",
     password2: "",
-    role: "",
+    role: "user",
   });
 
   const { name, email, password, password2, role } = formData;
@@ -41,6 +43,7 @@ const Register = ({ register, isAuthenticated, createAlert }) => {
       <div className="container">
         <div className="row">
           <div className="col-md-6 m-auto">
+            <Alert />
             <div className="card bg-white p-4 mb-4">
               <div className="card-body">
                 <h1>
@@ -60,7 +63,6 @@ const Register = ({ register, isAuthenticated, createAlert }) => {
                       placeholder="Enter full name"
                       onChange={(e) => handleChange(e)}
                       value={name}
-                      required
                     />
                   </div>
                   <div className="form-group">
@@ -72,7 +74,6 @@ const Register = ({ register, isAuthenticated, createAlert }) => {
                       placeholder="Enter email"
                       onChange={(e) => handleChange(e)}
                       value={email}
-                      required
                     />
                   </div>
                   <div className="form-group">
@@ -84,7 +85,6 @@ const Register = ({ register, isAuthenticated, createAlert }) => {
                       placeholder="Enter password"
                       onChange={(e) => handleChange(e)}
                       value={password}
-                      required
                     />
                   </div>
                   <div className="form-group mb-4">
@@ -96,7 +96,6 @@ const Register = ({ register, isAuthenticated, createAlert }) => {
                       placeholder="Confirm password"
                       onChange={(e) => handleChange(e)}
                       value={password2}
-                      required
                     />
                   </div>
 
@@ -144,6 +143,10 @@ const Register = ({ register, isAuthenticated, createAlert }) => {
                     />
                   </div>
                 </form>
+                <p>
+                  {" "}
+                  Already have an account? <Link to="/login">Log in</Link>
+                </p>
               </div>
             </div>
           </div>

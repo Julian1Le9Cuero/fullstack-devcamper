@@ -26,3 +26,24 @@ img {
 .alert {
   margin-top: 50px;
 }
+
+.spinner-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  border: 3px solid rgb(241, 178, 163);
+  border-bottom: 3px solid rgb(221, 52, 10);
+  animation: rotate 1s ease infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(360deg);
+  }
+}

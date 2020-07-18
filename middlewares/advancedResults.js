@@ -4,7 +4,7 @@ const advancedResults = (model, populate) =>
   asyncHandler(async (req, res, next) => {
     let query;
     let queryStr = JSON.stringify(req.query).replace(
-      /(lt|lte|in|gte|gt)gi/,
+      /(lt|lte|in|gte|gt)/gi,
       (param) => `$${param}`
     );
     queryStr = JSON.parse(queryStr);
