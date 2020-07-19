@@ -6,6 +6,7 @@ import {
   LOGIN_SUCCESS,
   LOAD_USER,
   AUTH_ERROR,
+  LOGOUT,
 } from "./types";
 import setAuthToken from "../../utils/setAuthToken";
 
@@ -91,6 +92,20 @@ export const login = (formData) => async (dispatch) => {
 
     dispatch({
       type: LOGIN_FAIL,
+      payload: error,
+    });
+  }
+};
+
+export const logout = () => async (dispatch) => {
+  try {
+    await axios.get("/api/v1/auth/logout");
+    dispatch({
+      type: LOGOUT,
+    });
+  } catch (error) {
+    dispatch({
+      type: AUTH_ERROR,
       payload: error,
     });
   }

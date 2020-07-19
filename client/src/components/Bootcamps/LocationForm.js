@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
 
-import { getBootcampsByRadius } from "../../redux/actions/bootcamps";
+import { getBootcamps } from "../../redux/actions/bootcamps";
 
-const LocationForm = ({ getBootcampsByRadius }) => {
+const LocationForm = ({ getBootcamps }) => {
   const [locationData, setLocation] = useState({
     zipcode: "",
     miles: "",
@@ -19,7 +19,7 @@ const LocationForm = ({ getBootcampsByRadius }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    getBootcampsByRadius(zipcode, miles);
+    getBootcamps(null, { zipcode, miles });
     setLocation({ zipcode: "", miles: "" });
   };
 
@@ -64,7 +64,7 @@ const LocationForm = ({ getBootcampsByRadius }) => {
 };
 
 LocationForm.propTypes = {
-  getBootcampsByRadius: PropTypes.func.isRequired,
+  getBootcamps: PropTypes.func.isRequired,
 };
 
-export default connect(null, { getBootcampsByRadius })(LocationForm);
+export default connect(null, { getBootcamps })(LocationForm);

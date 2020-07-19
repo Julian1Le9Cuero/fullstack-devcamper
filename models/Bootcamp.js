@@ -137,10 +137,14 @@ BootcampSchema.pre("save", async function (next) {
     country: countryCode,
   };
 
-  this.address = undefined;
-
   this.slug = slugify(this.name, { lower: true });
 
+  next();
+});
+
+// Remove all courses that belong to the bootcamp before the bootcamp is removed.
+BootcampSchema.pre("remove", async function (next) {
+  await this.model("Course").deleteMany({ bootcamp: this._id });
   next();
 });
 

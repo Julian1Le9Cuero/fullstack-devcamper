@@ -45,7 +45,9 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/auth/me
 // @access Private
 exports.getAuthUser = asyncHandler(async (req, res, next) => {
-  const user = req.user;
+  const user = await User.findById(req.user.id).populate(
+    "bootcamps courses reviews"
+  );
 
   res.status(200).json({
     success: true,

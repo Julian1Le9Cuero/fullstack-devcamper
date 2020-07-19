@@ -4,6 +4,7 @@ import {
   ADD_BOOTCAMP,
   REMOVE_BOOTCAMP,
   BOOTCAMP_ERROR,
+  IS_LOADING,
 } from "../actions/types";
 
 const initialState = {
@@ -19,7 +20,6 @@ const bootcamps = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case GET_BOOTCAMPS:
-    case ADD_BOOTCAMP:
       return {
         ...state,
         bootcamps: payload.data,
@@ -27,10 +27,11 @@ const bootcamps = (state = initialState, action) => {
         pagination: payload.pagination,
         loading: false,
       };
+    case ADD_BOOTCAMP:
     case GET_BOOTCAMP:
       return {
         ...state,
-        bootcamp: payload,
+        bootcamp: payload.data,
         loading: false,
       };
     case REMOVE_BOOTCAMP:
@@ -46,6 +47,11 @@ const bootcamps = (state = initialState, action) => {
         ...state,
         error: payload,
         loading: false,
+      };
+    case IS_LOADING:
+      return {
+        ...state,
+        loading: true,
       };
     default:
       return state;

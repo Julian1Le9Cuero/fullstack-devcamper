@@ -7,6 +7,10 @@ import Landing from "./components/Landing/Landing";
 import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
 import Bootcamps from "./components/Bootcamps/Bootcamps";
+import Bootcamp from "./components/Bootcamp/Bootcamp";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import ManageBootcamp from "./components/ManageBootcamp/ManageBootcamp";
+import BootcampForm from "./components/ManageBootcamp/BootcampForm";
 
 import { loadUser } from "./redux/actions/auth";
 
@@ -31,6 +35,13 @@ class App extends React.Component {
             <Route path="/register" exact component={Register} />
             <Route path="/login" exact component={Login} />
             <Route path="/bootcamps" exact component={Bootcamps} />
+            <Route path="/bootcamp/:id" exact component={Bootcamp} />
+            <PrivateRoute
+              path="/manage-bootcamp"
+              exact
+              component={ManageBootcamp}
+            />
+            <PrivateRoute path="/add-bootcamp" exact component={BootcampForm} />
           </Switch>
         </BrowserRouter>
       </Provider>

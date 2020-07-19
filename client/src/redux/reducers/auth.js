@@ -5,6 +5,7 @@ import {
   REGISTER_SUCCESS,
   LOAD_USER,
   AUTH_ERROR,
+  LOGOUT,
 } from "../actions/types";
 
 const initialState = {
@@ -28,7 +29,7 @@ const auth = (state = initialState, action) => {
     case LOAD_USER:
       return {
         ...state,
-        user: payload,
+        user: payload.data,
         loading: false,
         isAuthenticated: true,
       };
@@ -37,10 +38,18 @@ const auth = (state = initialState, action) => {
     case AUTH_ERROR:
       localStorage.removeItem("token");
       return {
+        ...state,
         error: payload,
         loading: false,
         isAuthenticated: false,
+      };
+    case LOGOUT:
+      localStorage.removeItem("token");
+      return {
         ...state,
+        loading: true,
+        user: null,
+        isAuthenticated: false,
       };
     default:
       return state;

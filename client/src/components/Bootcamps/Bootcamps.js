@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
-import { getBootcamps } from "../../redux/actions/bootcamps";
+import { getBootcamps, isLoading } from "../../redux/actions/bootcamps";
 
 import LocationForm from "./LocationForm";
 import FilterBootcampForm from "./FilterBootcampForm";
@@ -12,7 +12,11 @@ import Spinner from "../Spinner/Spinner";
 
 class Bootcamps extends React.Component {
   componentDidMount() {
-    this.props.getBootcamps();
+    // Check if there are bootcamps in the state,
+    // Otherwise retrieve them from db
+    if (this.props.bootcamps.length === 0) {
+      this.props.getBootcamps();
+    }
   }
 
   render() {
@@ -57,6 +61,7 @@ Bootcamps.propTypes = {
   getBootcamps: PropTypes.func.isRequired,
   bootcamps: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
+  isLoading: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -64,4 +69,4 @@ const mapStateToProps = (state) => ({
   loading: state.bootcamps.loading,
 });
 
-export default connect(mapStateToProps, { getBootcamps })(Bootcamps);
+export default connect(mapStateToProps, { getBootcamps, isLoading })(Bootcamps);

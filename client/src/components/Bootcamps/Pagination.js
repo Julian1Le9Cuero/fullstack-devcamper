@@ -1,16 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import PropTypes from 'prop-types'
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-const Pagination = () => {
+const Pagination = ({ pagination, results }) => {
+  console.log(pagination);
+  console.log(results);
   return (
     <nav aria-label="Page navigation example">
       <ul className="pagination">
-        <li className="page-item">
-          <Link className="page-link" to="#">
-            Previous
-          </Link>
-        </li>
+        {pagination.prev && (
+          <li className="page-item">
+            <Link className="page-link" to="#">
+              Previous
+            </Link>
+          </li>
+        )}
         <li className="page-item">
           <Link className="page-link" to="#">
             1
@@ -26,18 +31,26 @@ const Pagination = () => {
             3
           </Link>
         </li>
-        <li className="page-item">
-          <Link className="page-link" to="#">
-            Next
-          </Link>
-        </li>
+        {pagination.next && (
+          <li className="page-item">
+            <Link className="page-link" to="#">
+              Next
+            </Link>
+          </li>
+        )}
       </ul>
     </nav>
   );
 };
 
-// Pagination.propTypes = {
+Pagination.propTypes = {
+  pagination: PropTypes.object.isRequired,
+  results: PropTypes.number.isRequired,
+};
 
-// }
+const mapStateToProps = (state) => ({
+  pagination: state.bootcamps.pagination,
+  results: state.bootcamps.results,
+});
 
-export default Pagination;
+export default connect(mapStateToProps)(Pagination);

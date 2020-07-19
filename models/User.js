@@ -3,39 +3,62 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-    required: [true, "Please add a name"],
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      trim: true,
+      required: [true, "Please add a name"],
+    },
+    email: {
+      type: String,
+      trim: true,
+      required: [true, "Please add an email"],
+      match: [
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        "Please add a valid email",
+      ],
+      unique: true,
+    },
+    role: {
+      type: String,
+      enum: ["user", "publisher"],
+      default: "user",
+    },
+    password: {
+      type: String,
+      required: [true, "Please add a password"],
+      minlength: [6, "Password must be at least 6 characters long"],
+      select: false,
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  email: {
-    type: String,
-    trim: true,
-    required: [true, "Please add an email"],
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      "Please add a valid email",
-    ],
-    unique: true,
-  },
-  role: {
-    type: String,
-    enum: ["user", "publisher"],
-    default: "user",
-  },
-  password: {
-    type: String,
-    required: [true, "Please add a password"],
-    minlength: [6, "Password must be at least 6 characters long"],
-    select: false,
-  },
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  {
+    toJSON: { virtuals: true },
+  }
+);
+
+UserSchema.virtual("bootcamps", {
+  ref: "Bootcamp",
+  foreignField: "user",
+  localField: "_id",
+});
+
+UserSchema.virtual("courses", {
+  ref: "Course",
+  foreignField: "user",
+  localField: "_id",
+});
+
+UserSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "user",
+  localField: "_id",
 });
 
 UserSchema.methods.generateAuthToken = function () {
