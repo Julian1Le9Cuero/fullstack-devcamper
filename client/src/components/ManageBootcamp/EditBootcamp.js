@@ -1,12 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import BootcampItem from "../Bootcamps/BootcampItem";
-import { deleteBootcamp } from "../../redux/actions/bootcamps";
 
-const EditBootcamp = ({ user, deleteBootcamp, bootcamp }) => {
+import BootcampItem from "../Bootcamps/BootcampItem";
+import Alert from "../Alert/Alert";
+
+import {
+  deleteBootcamp,
+  uploadBootcampPhoto,
+} from "../../redux/actions/bootcamps";
+
+const EditBootcamp = ({
+  user,
+  deleteBootcamp,
+  bootcamp,
+  uploadBootcampPhoto,
+  uploadedPhoto,
+}) => {
+  const [file, setFile] = useState("");
+  const [fileName, setFileName] = useState("Add Bootcamp Image");
+
   const userBootcamp = user.bootcamps[0] || bootcamp;
+
+  const handleChange = (e) => {
+    setFile(e.target.files[0]);
+    setFileName(e.target.files[0].name);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", file);
+    uploadBootcampPhoto(userBootcamp._id, formData);
+  };
 
   return (
     <section className="container mt-5">
@@ -15,8 +42,12 @@ const EditBootcamp = ({ user, deleteBootcamp, bootcamp }) => {
           <div className="card bg-white py-2 px-4">
             <div className="card-body">
               <h1 className="mb-4">Manage Bootcamp</h1>
-              <BootcampItem bootcamp={userBootcamp} />
-              <form className="mb-4">
+              <Alert />
+              <BootcampItem
+                bootcamp={userBootcamp}
+                uploadedPhoto={uploadedPhoto}
+              />
+              <form className="mb-4" onSubmit={(e) => handleSubmit(e)}>
                 <div className="form-group">
                   <div className="custom-file">
                     <input
@@ -24,9 +55,10 @@ const EditBootcamp = ({ user, deleteBootcamp, bootcamp }) => {
                       name="photo"
                       className="custom-file-input"
                       id="photo"
+                      onChange={(e) => handleChange(e)}
                     />
                     <label className="custom-file-label" htmlFor="photo">
-                      Add Bootcamp Image
+                      {fileName}
                     </label>
                   </div>
                 </div>
@@ -72,11 +104,17 @@ EditBootcamp.propTypes = {
   user: PropTypes.object.isRequired,
   bootcamp: PropTypes.object.isRequired,
   deleteBootcamp: PropTypes.func.isRequired,
+  uploadBootcampPhoto: PropTypes.func.isRequired,
+  uploadedPhoto: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
   bootcamp: state.bootcamps.bootcamp,
+  uploadedPhoto: state.bootcamps.uploadedPhoto,
 });
 
-export default connect(mapStateToProps, { deleteBootcamp })(EditBootcamp);
+export default connect(mapStateToProps, {
+  deleteBootcamp,
+  uploadBootcampPhoto,
+})(EditBootcamp);

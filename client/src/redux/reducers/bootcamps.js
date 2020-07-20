@@ -5,6 +5,7 @@ import {
   REMOVE_BOOTCAMP,
   BOOTCAMP_ERROR,
   IS_LOADING,
+  ADD_PHOTO,
 } from "../actions/types";
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   pagination: {},
   loading: true,
   error: null,
+  uploadedPhoto: null,
 };
 
 const bootcamps = (state = initialState, action) => {
@@ -44,6 +46,12 @@ const bootcamps = (state = initialState, action) => {
       return {
         ...state,
         error: payload,
+        loading: false,
+      };
+    case ADD_PHOTO:
+      return {
+        ...state,
+        uploadedPhoto: payload.data,
         loading: false,
       };
     case IS_LOADING:

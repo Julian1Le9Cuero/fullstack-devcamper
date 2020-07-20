@@ -13,3 +13,4 @@ export const ADD_BOOTCAMP = "ADD_BOOTCAMP";
 export const REMOVE_BOOTCAMP = "REMOVE_BOOTCAMP";
 export const BOOTCAMP_ERROR = "BOOTCAMP_ERROR";
 export const IS_LOADING = "IS_LOADING";
+export const ADD_PHOTO = "ADD_PHOTO";

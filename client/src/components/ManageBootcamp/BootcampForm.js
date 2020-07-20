@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { addBootcamp, updateBootcamp } from "../../redux/actions/bootcamps";
 
 import Alert from "../Alert/Alert";
+import { addBootcamp, updateBootcamp } from "../../redux/actions/bootcamps";
 
 class BootcampForm extends React.Component {
   state = {
@@ -22,6 +22,7 @@ class BootcampForm extends React.Component {
   };
 
   componentDidMount() {
+    // Get recently added/updated bootcamp or bootcamp from database
     const bootcamp = this.props.bootcamp || this.props.user.bootcamps[0];
     const bootcampDetails = {};
 
@@ -55,7 +56,7 @@ class BootcampForm extends React.Component {
 
     const { addBootcamp, history, user, updateBootcamp } = this.props;
 
-    // Existing bootcamp from database
+    // Get recently added/updated bootcamp or bootcamp from database
     const bootcamp = this.props.bootcamp || user.bootcamps[0];
 
     const handleChange = (e) => {
@@ -65,6 +66,7 @@ class BootcampForm extends React.Component {
     const handleSubmit = (e) => {
       e.preventDefault();
 
+      // Add new bootcamp if does not exist, otherwise update it.
       if (!bootcamp) {
         addBootcamp(this.state, history);
       } else {

@@ -6,6 +6,7 @@ import {
   REMOVE_BOOTCAMP,
   BOOTCAMP_ERROR,
   IS_LOADING,
+  ADD_PHOTO,
 } from "./types";
 
 import composeUrl from "../../utils/composeUrl";
@@ -109,6 +110,42 @@ export const updateBootcamp = (bootcampId, formData) => async (dispatch) => {
 
     dispatch(createAlert("Bootcamp updated.", "success", 3000));
   } catch (error) {
+    dispatch({
+      type: BOOTCAMP_ERROR,
+      payload: error,
+    });
+  }
+};
+
+// Upload bootcamp photo
+export const uploadBootcampPhoto = (bootcampId, file) => async (dispatch) => {
+  try {
+    const config = {
+      header: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    const res = await axios.put(
+      `/api/v1/bootcamps/${bootcampId}/photo`,
+      file,
+      config
+    );
+
+    dispatch(createAlert("Photo uploaded.", "success", 3000));
+
+    dispatch({
+      type: IS_LOADING,
+    });
+
+    dispatch({
+      type: ADD_PHOTO,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch(
+      createAlert("An error occured with the file upload.", "danger", 3000)
+    );
     dispatch({
       type: BOOTCAMP_ERROR,
       payload: error,

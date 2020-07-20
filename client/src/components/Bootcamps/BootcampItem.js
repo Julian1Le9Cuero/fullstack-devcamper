@@ -2,13 +2,19 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const BootcampItem = ({ bootcamp }) => {
+const BootcampItem = ({ bootcamp, uploadedPhoto }) => {
   const { _id, name, careers, location, averageRating, photo } = bootcamp;
   return (
     <div className="card mb-3">
       <div className="row no-gutters">
         <div className="col-md-4">
-          <img src="img/image_1.jpg" className="card-img" alt="..." />
+          <img
+            src={
+              uploadedPhoto ? `uploads/${uploadedPhoto}` : `uploads/${photo}`
+            }
+            className="card-img"
+            alt="..."
+          />
         </div>
         <div className="col-md-8">
           <div className="card-body">
