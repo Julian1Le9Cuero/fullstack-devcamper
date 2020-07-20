@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../redux/actions/auth";
 
-const Navbar = ({ isAuthenticated, logout }) => {
+const Navbar = ({ isAuthenticated, user, logout }) => {
   const guestLinks = (
     <Fragment>
       <li className="nav-item">
@@ -37,9 +37,11 @@ const Navbar = ({ isAuthenticated, logout }) => {
           <i className="fas fa-user"></i> Account
         </Link>
         <div className="dropdown-menu">
-          <Link className="dropdown-item" to="/manage-bootcamp">
-            Manage Bootcamp
-          </Link>
+          {user && user.role === "publisher" && (
+            <Link className="dropdown-item" to="/manage-bootcamp">
+              Manage Bootcamp
+            </Link>
+          )}
           <Link className="dropdown-item" to="/manage-reviews">
             Manage Reviews
           </Link>
@@ -87,6 +89,7 @@ const Navbar = ({ isAuthenticated, logout }) => {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
 });
 
 Navbar.propTypes = {

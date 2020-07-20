@@ -28,6 +28,7 @@ class Bootcamp extends React.Component {
       jobAssistance,
       housing,
       acceptGi,
+      photo,
     } = bootcampProps;
 
     return this.props.loading ? (
@@ -54,7 +55,7 @@ class Bootcamp extends React.Component {
             {/* <!-- Sidebar --> */}
             <div className="col-md-4">
               {/* <!-- Image --> */}
-              <img src="/img/image_3.jpg" className="img-thumbnail" alt="" />
+              <img src={`uploads/${photo}`} className="img-thumbnail" alt="" />
               {/* <!-- Rating --> */}
               <h1 className="text-center my-4">
                 Rating{" "}

@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, BrowserRouter, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+
 import Navbar from "./components/Navbar/Navbar";
 import Landing from "./components/Landing/Landing";
 import Register from "./components/Register/Register";
@@ -11,6 +12,8 @@ import Bootcamp from "./components/Bootcamp/Bootcamp";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import ManageBootcamp from "./components/ManageBootcamp/ManageBootcamp";
 import BootcampForm from "./components/ManageBootcamp/BootcampForm";
+import ManageCourses from "./components/ManageCourses/ManageCourses";
+import CourseForm from "./components/ManageCourses/CourseForm";
 
 import { loadUser } from "./redux/actions/auth";
 
@@ -42,6 +45,12 @@ class App extends React.Component {
               component={ManageBootcamp}
             />
             <PrivateRoute path="/add-bootcamp" exact component={BootcampForm} />
+            <PrivateRoute
+              path="/manage-courses"
+              exact
+              component={ManageCourses}
+            />
+            <PrivateRoute path="/add-course" exact component={CourseForm} />
           </Switch>
         </BrowserRouter>
       </Provider>

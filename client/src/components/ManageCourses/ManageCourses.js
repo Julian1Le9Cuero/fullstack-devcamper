@@ -3,34 +3,31 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import AddBootcamp from "./AddBootcamp";
-import EditBootcamp from "./EditBootcamp";
 import Spinner from "../Spinner/Spinner";
+import AddCourse from "./AddCourse";
+import EditCourses from "./EditCourses";
 
-const ManageBootcamp = ({ user, loading, bootcamp }) => {
+const ManageCourses = ({ user, loading }) => {
   if (user && user.role === "user") {
     return <Redirect to="/bootcamps" />;
   }
-
   return loading ? (
     <Spinner />
-  ) : user.bootcamps.length > 0 || bootcamp ? (
-    <EditBootcamp />
+  ) : user.courses.length > 0 ? (
+    <EditCourses />
   ) : (
-    <AddBootcamp />
+    <AddCourse />
   );
 };
 
-ManageBootcamp.propTypes = {
+ManageCourses.propTypes = {
   user: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  bootcamp: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
   loading: state.auth.loading,
-  bootcamp: state.bootcamps.bootcamp,
 });
 
-export default connect(mapStateToProps)(ManageBootcamp);
+export default connect(mapStateToProps)(ManageCourses);
