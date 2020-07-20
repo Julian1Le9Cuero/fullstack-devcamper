@@ -4,12 +4,10 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 const Pagination = ({ pagination, results }) => {
-  console.log(pagination);
-  console.log(results);
   return (
     <nav aria-label="Page navigation example">
       <ul className="pagination">
-        {pagination.prev && (
+        {pagination && pagination.prev && (
           <li className="page-item">
             <Link className="page-link" to="#">
               Previous
@@ -31,7 +29,7 @@ const Pagination = ({ pagination, results }) => {
             3
           </Link>
         </li>
-        {pagination.next && (
+        {pagination && pagination.next && (
           <li className="page-item">
             <Link className="page-link" to="#">
               Next

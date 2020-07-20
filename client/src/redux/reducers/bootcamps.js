@@ -37,9 +37,7 @@ const bootcamps = (state = initialState, action) => {
     case REMOVE_BOOTCAMP:
       return {
         ...state,
-        bootcamps: state.bootcamps.filter(
-          (bootcamp) => bootcamp._id !== payload
-        ),
+        bootcamp: null,
         loading: false,
       };
     case BOOTCAMP_ERROR:

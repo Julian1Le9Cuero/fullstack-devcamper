@@ -29,7 +29,7 @@ class Bootcamp extends React.Component {
       housing,
       acceptGi,
     } = bootcampProps;
-    console.log(bootcampProps);
+
     return this.props.loading ? (
       <Spinner />
     ) : (

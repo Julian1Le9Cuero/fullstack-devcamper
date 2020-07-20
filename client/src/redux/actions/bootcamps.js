@@ -10,6 +10,7 @@ import {
 
 import composeUrl from "../../utils/composeUrl";
 import { createAlert } from "./alert";
+import { loadUser } from "./auth";
 
 // Fetch all bootcamps
 export const getBootcamps = (filters, location) => async (dispatch) => {
@@ -22,11 +23,10 @@ export const getBootcamps = (filters, location) => async (dispatch) => {
     const { zipcode, miles } = location;
     // Check if both zipcode and miles are not empty
     if (zipcode && miles) {
-      url = `${url}/radius/${zipcode}/${miles}`;
+      url = `/api/v1/bootcamps/radius/${zipcode}/${miles}`;
     }
   }
-  console.log(location);
-  console.log(url);
+
   try {
     const res = await axios.get(url);
 
@@ -124,8 +124,9 @@ export const deleteBootcamp = (bootcampId) => async (dispatch) => {
 
       dispatch({
         type: REMOVE_BOOTCAMP,
-        payload: bootcampId,
       });
+
+      dispatch(loadUser());
     } catch (error) {
       dispatch({
         type: BOOTCAMP_ERROR,
