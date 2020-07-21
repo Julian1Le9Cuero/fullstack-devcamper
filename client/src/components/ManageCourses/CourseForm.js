@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { addCourse, updateCourse } from "../../redux/actions/courses";
 
 class CourseForm extends React.Component {
@@ -12,18 +12,24 @@ class CourseForm extends React.Component {
     tuition: "",
     minimumSkill: [],
     description: "",
-    scholarshipAvailable: false,
+    scholarshipsAvailable: false,
   };
 
   componentDidMount() {
-    if (this.props.course) {
-      let courseDetails = {};
-      for (const key in this.props.course) {
+    if (this.props.user && this.props.user.role === "user") {
+      return <Redirect to="/bootcamps" />;
+    }
+
+    const course = this.props.course;
+    const courseDetails = {};
+
+    if (course) {
+      for (const key in course) {
         if (key in this.state) {
-          courseDetails[key] = this.props.course[key];
+          courseDetails[key] = course[key];
         }
       }
-      this.setState(courseDetails);
+      this.setState({ ...courseDetails });
     }
   }
 
@@ -38,7 +44,7 @@ class CourseForm extends React.Component {
     const handleSubmit = (e) => {
       e.preventDefault();
       if (course) {
-        updateCourse(course._id, this.state);
+        updateCourse(course._id, this.state, history);
       } else {
         addCourse(bootcamp._id, this.state, history);
       }
@@ -49,7 +55,7 @@ class CourseForm extends React.Component {
       weeks,
       tuition,
       description,
-      scholarshipAvailable,
+      scholarshipsAvailable,
     } = this.state;
 
     return (
@@ -65,7 +71,9 @@ class CourseForm extends React.Component {
                   <i className="fas fa-chevron-left"></i> Manage Courses
                 </Link>
                 <h1 className="mb-2">DevWorks Bootcamp</h1>
-                <h3 className="text-primary mb-4">Add Course</h3>
+                <h3 className="text-primary mb-4">
+                  {!course ? "Add" : "Update"} Course
+                </h3>
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">
                     <label>Course Title</label>
@@ -141,27 +149,27 @@ class CourseForm extends React.Component {
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      name="scholarshipAvailable"
-                      id="scholarshipAvailable"
-                      checked={scholarshipAvailable}
+                      name="scholarshipsAvailable"
+                      id="scholarshipsAvailable"
+                      checked={scholarshipsAvailable}
                       onChange={(e) =>
                         this.setState({
                           ...this.state,
-                          scholarshipAvailable: !scholarshipAvailable,
+                          scholarshipsAvailable: !scholarshipsAvailable,
                         })
                       }
                     />
                     <label
                       className="form-check-label"
-                      htmlFor="scholarshipAvailable"
+                      htmlFor="scholarshipsAvailable"
                     >
-                      Scholarship Available
+                      Scholarships Available
                     </label>
                   </div>
                   <div className="form-group mt-4">
                     <input
                       type="submit"
-                      value="Add Course"
+                      value={`${!course ? "Add" : "Update"} Course`}
                       className="btn btn-dark btn-block"
                     />
                   </div>
@@ -179,7 +187,6 @@ CourseForm.propTypes = {
   addCourse: PropTypes.func.isRequired,
   updateCourse: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  course: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

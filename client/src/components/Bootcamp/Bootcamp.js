@@ -31,7 +31,7 @@ class Bootcamp extends React.Component {
       photo,
     } = bootcampProps;
 
-    return this.props.loading ? (
+    return this.props.loading && !this.props.bootcamp ? (
       <Spinner />
     ) : (
       <section className="bootcamp mt-5">
@@ -50,7 +50,11 @@ class Bootcamp extends React.Component {
                 </span>
               </p>
               {/* <!-- Courses --> */}
-              <CourseItem />
+              {bootcampProps.courses &&
+                bootcampProps.courses.length > 0 &&
+                bootcampProps.courses.map((course) => (
+                  <CourseItem key={course._id} course={course} />
+                ))}
             </div>
             {/* <!-- Sidebar --> */}
             <div className="col-md-4">

@@ -12,7 +12,7 @@ const composeUrl = (url, filters) => {
     }
 
     if (key === "averageCost" && filters[key]) {
-      composedUrl = composedUrl + `${query}${key}[gte]=${filters[key]}`;
+      composedUrl = composedUrl + `${query}${key}[lte]=${filters[key]}`;
       query = "&";
     }
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -7,10 +7,17 @@ import Spinner from "../Spinner/Spinner";
 import AddCourse from "./AddCourse";
 import EditCourses from "./EditCourses";
 
-const ManageCourses = ({ user, loading }) => {
+import { getCourses } from "../../redux/actions/courses";
+
+const ManageCourses = ({ user, loading, getCourses }) => {
+  useEffect(() => {
+    getCourses(user.bootcamps[0]._id);
+  }, [getCourses, user.bootcamps]);
+
   if (user && user.role === "user") {
     return <Redirect to="/bootcamps" />;
   }
+
   return loading ? (
     <Spinner />
   ) : user.courses.length > 0 ? (
@@ -23,6 +30,7 @@ const ManageCourses = ({ user, loading }) => {
 ManageCourses.propTypes = {
   user: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
+  getCourses: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -30,4 +38,4 @@ const mapStateToProps = (state) => ({
   loading: state.auth.loading,
 });
 
-export default connect(mapStateToProps)(ManageCourses);
+export default connect(mapStateToProps, { getCourses })(ManageCourses);

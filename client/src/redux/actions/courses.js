@@ -1,5 +1,12 @@
 import axios from "axios";
-import { GET_COURSES, GET_COURSE, REMOVE_COURSE, COURSE_ERROR } from "./types";
+import {
+  GET_COURSES,
+  GET_COURSE,
+  REMOVE_COURSE,
+  COURSE_ERROR,
+  LOAD_COURSE,
+  UNLOAD_COURSE,
+} from "./types";
 
 import { createAlert } from "./alert";
 
@@ -9,7 +16,7 @@ import composeUrl from "../../utils/composeUrl";
 export const getCourses = (bootcampId, filters) => async (dispatch) => {
   let url;
   if (bootcampId) {
-    url = `/api/v1/bootcamps/:${bootcampId}/courses`;
+    url = `/api/v1/bootcamps/${bootcampId}/courses`;
   } else if (filters) {
     url = composeUrl("/api/v1/courses", filters);
   }
@@ -58,7 +65,7 @@ export const addCourse = (bootcampId, formData, history) => async (
     };
 
     const res = await axios.post(
-      `/api/v1/bootcamps/:${bootcampId}/courses`,
+      `/api/v1/bootcamps/${bootcampId}/courses`,
       formData,
       config
     );
@@ -79,8 +86,25 @@ export const addCourse = (bootcampId, formData, history) => async (
   }
 };
 
+// Load course for the CourseForm
+export const loadCourse = (courseId) => (dispatch) => {
+  dispatch({
+    type: LOAD_COURSE,
+    payload: courseId,
+  });
+};
+
+// Unload course for the CourseForm when user is going to add a new course
+export const unLoadCourse = () => (dispatch) => {
+  dispatch({
+    type: UNLOAD_COURSE,
+  });
+};
+
 // Update course from database by id
-export const updateCourse = (courseId, formData) => async (dispatch) => {
+export const updateCourse = (courseId, formData, history) => async (
+  dispatch
+) => {
   try {
     const config = {
       headers: {
@@ -100,6 +124,8 @@ export const updateCourse = (courseId, formData) => async (dispatch) => {
     });
 
     dispatch(createAlert("Course updated.", "success", 2500));
+
+    history.push("/manage-courses");
   } catch (error) {
     dispatch({
       type: COURSE_ERROR,
@@ -116,6 +142,7 @@ export const deleteCourse = (courseId) => async (dispatch) => {
 
       dispatch({
         type: REMOVE_COURSE,
+        payload: courseId,
       });
 
       dispatch(createAlert("Course deleted.", "danger", 2500));

@@ -18,3 +18,5 @@ export const BOOTCAMP_ERROR = "BOOTCAMP_ERROR";
 export const COURSE_ERROR = "COURSE_ERROR";
 export const IS_LOADING = "IS_LOADING";
 export const ADD_PHOTO = "ADD_PHOTO";
+export const LOAD_COURSE = "LOAD_COURSE";
+export const UNLOAD_COURSE = "UNLOAD_COURSE";
