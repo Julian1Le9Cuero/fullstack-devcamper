@@ -1,63 +1,122 @@
 import React from "react";
-// import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-const BootcampReviews = () => {
-  return (
-    <section className="bootcamp mt-5">
-      <div className="container">
-        <div className="row">
-          {/* Main col  */}
-          <div className="col-md-8">
-            <Link
-              to="/bootcamp"
-              target="_blank"
-              className="btn btn-secondary my-3"
-            >
-              <i className="fas fa-chevron-left"></i> Bootcamp Info
-            </Link>
-            <h1 className="mb-4">DevWorks Bootcamp Reviews</h1>
-            {/* Reviews  */}
-            <div className="card mb-3">
-              <h5 className="card-header bg-dark text-white">
-                Fantastic Bootcamp
-              </h5>
-              <div className="card-body">
-                <h5 className="card-title">
-                  Rating: <span className="text-success">10</span>
-                </h5>
-                <p className="card-text">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Commodi similique mollitia, praesentium, animi harum officia
-                  dolores corporis ex tempore consequuntur dolorem ullam dolorum
-                  magnam corrupti quaerat tempora repudiandae! Similique,
-                  molestiae. Iste, blanditiis recusandae unde tenetur eius
-                  exercitationem rerum a fuga.
-                </p>
-                <p className="text-muted">Writtern By Kevin Smith</p>
-              </div>
+import Spinner from "../Spinner/Spinner";
+import ReviewItem from "./ReviewItem";
+
+import { getBootcamp, isLoading } from "../../redux/actions/bootcamps";
+import {
+  loadBootcampReview,
+  unLoadReview,
+  getReviews,
+} from "../../redux/actions/reviews";
+
+class BootcampReviews extends React.Component {
+  componentDidMount() {
+    const bootcampId = this.props.match.params.bootcampId;
+    this.props.isLoading();
+    this.props.getBootcamp(bootcampId);
+    this.props.getReviews(bootcampId);
+  }
+
+  render() {
+    const { bootcamp, bootcampLoading, reviewsLoading, reviews } = this.props;
+    let currentUserHasReview;
+
+    if (bootcamp && bootcamp.reviews.length && this.props.user) {
+      currentUserHasReview = bootcamp.reviews.find(
+        (review) => review.user.toString() === this.props.user._id
+      );
+    }
+
+    const { _id, name, averageRating } = bootcamp;
+
+    return bootcampLoading || !bootcamp ? (
+      <Spinner />
+    ) : (
+      <section className="bootcamp mt-5">
+        <div className="container">
+          <div className="row">
+            {/* Main col  */}
+            <div className="col-md-8">
+              <Link
+                to={`/bootcamp/${_id}`}
+                target="_blank"
+                className="btn btn-secondary my-3"
+              >
+                <i className="fas fa-chevron-left"></i> Bootcamp Info
+              </Link>
+              <h1 className="mb-4">{name} Reviews</h1>
+              {/* Reviews  */}
+              {reviewsLoading ? (
+                <Spinner />
+              ) : reviews.length === 0 ? (
+                <h2>This bootcamp has no reviews yet.</h2>
+              ) : (
+                reviews.map((review) => (
+                  <ReviewItem key={review._id} review={review} />
+                ))
+              )}
+            </div>
+            {/* Sidebar */}
+            <div className="col-md-4">
+              {/* Rating  */}
+              <h1 className="text-center my-4">
+                Rating{" "}
+                <span className="badge badge-secondary badge-success rounded-circle p-3">
+                  {averageRating ? averageRating : "New"}
+                </span>
+              </h1>
+              {/*  Buttons */}
+              {currentUserHasReview ? (
+                <Link
+                  to="/add-review"
+                  className="btn btn-primary btn-block my-3"
+                  onClick={() =>
+                    this.props.loadBootcampReview(currentUserHasReview)
+                  }
+                >
+                  <i className="fas fa-pencil-alt"></i> Modify Review
+                </Link>
+              ) : (
+                <Link
+                  to="/add-review"
+                  className="btn btn-primary btn-block my-3"
+                  onClick={() => this.props.unLoadReview()}
+                >
+                  <i className="fas fa-pencil-alt"></i> Write a Review
+                </Link>
+              )}
             </div>
           </div>
-          {/* Sidebar */}
-          <div className="col-md-4">
-            {/* Rating  */}
-            <h1 className="text-center my-4">
-              <span className="badge badge-secondary badge-success rounded-circle p-3">
-                8.8
-              </span>
-              Rating
-            </h1>
-            {/*  Buttons */}
-            <Link to="/add-review" className="btn btn-primary btn-block my-3">
-              <i className="fas fa-pencil-alt"></i> Review This Bootcamp
-            </Link>
-          </div>
         </div>
-      </div>
-    </section>
-  );
+      </section>
+    );
+  }
+}
+
+BootcampReviews.propTypes = {
+  loadBootcampReview: PropTypes.func.isRequired,
+  unLoadReview: PropTypes.func.isRequired,
+  getBootcamp: PropTypes.func.isRequired,
+  isLoading: PropTypes.func.isRequired,
+  getReviews: PropTypes.func.isRequired,
 };
 
-/* BootcampReviews.propTypes = {} */
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+  bootcamp: state.bootcamps.bootcamp,
+  bootcampLoading: state.bootcamps.loading,
+  reviewsLoading: state.reviews.loading,
+  reviews: state.reviews.reviews,
+});
 
-export default BootcampReviews;
+export default connect(mapStateToProps, {
+  loadBootcampReview,
+  unLoadReview,
+  getBootcamp,
+  isLoading,
+  getReviews,
+})(BootcampReviews);

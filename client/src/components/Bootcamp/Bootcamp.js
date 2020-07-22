@@ -82,7 +82,7 @@ class Bootcamp extends React.Component {
               </h1>
               {/* <!-- Buttons --> */}
               <Link
-                to={`/reviews/${_id}`}
+                to={`/bootcamps/reviews/${_id}`}
                 className="btn btn-dark btn-block my-3"
               >
                 <i className="fas fa-comments"></i> Read Reviews

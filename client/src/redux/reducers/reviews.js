@@ -11,7 +11,7 @@ const initialState = {
   reviews: [],
   review: null,
   error: null,
-  loading: false,
+  loading: true,
 };
 
 const reviews = (state = initialState, action) => {

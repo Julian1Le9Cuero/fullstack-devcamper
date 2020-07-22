@@ -16,6 +16,7 @@ import ManageCourses from "./components/ManageCourses/ManageCourses";
 import CourseForm from "./components/ManageCourses/CourseForm";
 import ManageReviews from "./components/ManageReviews/ManageReviews";
 import ReviewForm from "./components/ManageReviews/ReviewForm";
+import BootcampReviews from "./components/BootcampReviews/BootcampReviews";
 
 import { loadUser } from "./redux/actions/auth";
 
@@ -59,6 +60,11 @@ class App extends React.Component {
               component={ManageReviews}
             />
             <PrivateRoute path="/add-review" exact component={ReviewForm} />
+            <Route
+              exact
+              path="/bootcamps/reviews/:bootcampId"
+              component={BootcampReviews}
+            />
           </Switch>
         </BrowserRouter>
       </Provider>
