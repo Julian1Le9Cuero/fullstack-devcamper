@@ -12,6 +12,7 @@ const initialState = {
   bootcamps: [],
   bootcamp: null,
   results: 0,
+  total: 0,
   pagination: {},
   loading: true,
   error: null,
@@ -26,6 +27,7 @@ const bootcamps = (state = initialState, action) => {
         ...state,
         bootcamps: payload.data,
         results: payload.count,
+        total: payload.total,
         pagination: payload.pagination,
         loading: false,
       };

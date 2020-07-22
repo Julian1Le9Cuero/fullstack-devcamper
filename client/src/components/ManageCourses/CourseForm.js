@@ -35,7 +35,7 @@ class CourseForm extends React.Component {
 
   render() {
     const { addCourse, updateCourse, user, history, course } = this.props;
-    const bootcamp = user.bootcamps[0];
+    const bootcamp = user.bootcamps[0] || this.props.bootcamp;
 
     const handleChange = (e) => {
       this.setState({ ...this.state, [e.target.name]: e.target.value });
@@ -124,9 +124,10 @@ class CourseForm extends React.Component {
                         })
                       }
                     >
-                      <option value="beginner" defaultValue>
-                        Beginner (Any)
+                      <option value="" defaultValue>
+                        Select Minimum Skill
                       </option>
+                      <option value="beginner">Beginner (Any)</option>
                       <option value="intermediate">Intermediate</option>
                       <option value="advanced">Advanced</option>
                     </select>
@@ -192,6 +193,7 @@ CourseForm.propTypes = {
 const mapStateToProps = (state) => ({
   user: state.auth.user,
   course: state.courses.course,
+  bootcamp: state.bootcamps.bootcamp,
 });
 
 export default connect(mapStateToProps, { addCourse, updateCourse })(

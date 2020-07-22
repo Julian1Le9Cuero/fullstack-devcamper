@@ -64,16 +64,13 @@ export const addCourse = (bootcampId, formData, history) => async (
       },
     };
 
-    const res = await axios.post(
+    await axios.post(
       `/api/v1/bootcamps/${bootcampId}/courses`,
       formData,
       config
     );
 
-    dispatch({
-      type: GET_COURSES,
-      payload: res.data,
-    });
+    dispatch(getCourses(bootcampId));
 
     dispatch(createAlert("Course created.", "success", 3500));
 

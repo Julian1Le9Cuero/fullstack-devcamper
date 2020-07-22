@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { addReview, updateReview } from "../../redux/actions/reviews";
 
@@ -12,6 +12,10 @@ class ReviewForm extends React.Component {
   };
 
   componentDidMount() {
+    if (this.props.user.role === "publisher") {
+      return <Redirect to="/bootcamps" />;
+    }
+
     const review = this.props.review;
     if (review) {
       const reviewDetails = {};

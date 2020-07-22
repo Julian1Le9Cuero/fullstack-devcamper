@@ -47,3 +47,10 @@ img {
     transform: rotate(360deg);
   }
 }
+
+.page-link-hovered {
+  color: #ac361a;
+  text-decoration: none;
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}

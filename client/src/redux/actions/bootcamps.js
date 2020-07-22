@@ -18,7 +18,7 @@ export const getBootcamps = (filters, location) => async (dispatch) => {
   let url = "/api/v1/bootcamps?limit=4";
   if (filters) {
     // Get bootcamps with filters if provided
-    url = composeUrl("/api/v1/bootcamps", filters);
+    url = composeUrl(url, filters);
   } else if (location) {
     // Get bootcamps by radius
     const { zipcode, miles } = location;

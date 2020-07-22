@@ -4,7 +4,7 @@ const advancedResults = (model, populate) =>
   asyncHandler(async (req, res, next) => {
     let query;
     let queryStr = JSON.stringify(req.query).replace(
-      /(lt|lte|in|gte|gt)/gi,
+      /\b(lt|lte|in|gte|gt)\b/gi,
       (param) => `$${param}`
     );
     queryStr = JSON.parse(queryStr);
@@ -39,13 +39,12 @@ const advancedResults = (model, populate) =>
 
     query = query.skip(startIndex).limit(limitBy);
 
-    let pagination = {};
+    let pagination = { total, limit: limitBy };
 
     // Check if still can go backwards
     if (startIndex > 0) {
       pagination.prev = {
         page: currentPage - 1,
-        limit: limitBy,
       };
     }
 
@@ -53,7 +52,6 @@ const advancedResults = (model, populate) =>
     if (endIndex < total) {
       pagination.next = {
         page: currentPage + 1,
-        limit: limitBy,
       };
     }
 
