@@ -77,14 +77,16 @@ exports.getCourse = asyncHandler(async (req, res, next) => {
 // @route PUT /api/v1/courses/:id
 // @access Private
 exports.updateCourse = asyncHandler(async (req, res, next) => {
-  const course = await Course.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  for (update in req.body) {
+    res.resource[update] = req.body[update];
+  }
+
+  // Recalculate averageCost after save
+  await res.resource.save();
 
   return res.status(200).json({
     success: true,
-    data: course,
+    data: res.resource,
   });
 });
 

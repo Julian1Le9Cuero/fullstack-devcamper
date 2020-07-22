@@ -45,9 +45,9 @@ router
     deleteReview
   );
 
-// Route: /api/v1/reviews/:userId
+// Route: /api/v1/reviews/users/:userId
 router
-  .route("/:userId")
+  .route("/users/:userId")
   .get(protect, authorize("admin", "user"), getUserReviews);
 
 module.exports = router;

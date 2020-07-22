@@ -7,19 +7,21 @@ import EditReviews from "./EditReviews";
 import AddReview from "./AddReview";
 import Spinner from "../Spinner/Spinner";
 
-const ManageReviews = ({ user, loading, getUserReviews }) => {
+import { getUserReviews } from "../../redux/actions/reviews";
+
+const ManageReviews = ({ user, loading, getUserReviews, reviews }) => {
   useEffect(() => {
-    getUserReviews();
-  }, [getUserReviews]);
+    getUserReviews(user._id);
+  }, [getUserReviews, user]);
 
   if (user && user.role === "publisher") {
     return <Redirect to="/bootcamps" />;
   }
 
-  return loading ? (
+  return loading && !reviews ? (
     <Spinner />
-  ) : user && user.reviews.length > 0 ? (
-    <EditReviews reviews={user.reviews} />
+  ) : reviews.length > 0 ? (
+    <EditReviews reviews={reviews} />
   ) : (
     <AddReview />
   );
@@ -28,13 +30,13 @@ const ManageReviews = ({ user, loading, getUserReviews }) => {
 ManageReviews.propTypes = {
   user: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  loadUser: PropTypes.func.isRequired,
-  isLoading: PropTypes.func.isRequired,
+  getUserReviews: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
-  loading: state.auth.loading,
+  loading: state.reviews.loading,
+  reviews: state.reviews.reviews,
 });
 
-export default connect(mapStateToProps, { loadUser, isLoading })(ManageReviews);
+export default connect(mapStateToProps, { getUserReviews })(ManageReviews);

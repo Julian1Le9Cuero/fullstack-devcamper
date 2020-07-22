@@ -50,7 +50,7 @@ exports.getReviews = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Get reviews by user
-// @route GET /api/v1/reviews/:userId
+// @route GET /api/v1/reviews/users/:userId
 // @access Public
 exports.getUserReviews = asyncHandler(async (req, res, next) => {
   const reviews = await Review.find({ user: req.params.userId }).populate({
@@ -95,14 +95,15 @@ exports.getReview = asyncHandler(async (req, res, next) => {
 // @route PUT /api/v1/reviews/:id
 // @access Private
 exports.updateReview = asyncHandler(async (req, res, next) => {
-  const review = await Review.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  for (update in req.body) {
+    res.resource[update] = req.body[update];
+  }
+
+  await res.resource.save();
 
   res.status(200).json({
     success: true,
-    data: review,
+    data: res.resource,
   });
 });
 

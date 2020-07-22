@@ -17,7 +17,7 @@ const EditReviewsItems = ({ reviews, loadReview, removeReview }) => {
       <tbody>
         {reviews.map(({ _id, rating, bootcamp }) => (
           <tr key={_id}>
-            <td>{bootcamp}</td>
+            <td>{bootcamp.name}</td>
             <td>{rating}</td>
             <td>
               <Link
@@ -26,7 +26,7 @@ const EditReviewsItems = ({ reviews, loadReview, removeReview }) => {
                 onClick={() => loadReview(_id)}
               >
                 <i className="fas fa-pencil-alt"></i>
-              </Link>
+              </Link>{" "}
               <button
                 className="btn btn-danger"
                 onClick={() => removeReview(_id)}

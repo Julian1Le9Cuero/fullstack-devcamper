@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import Spinner from "../Spinner/Spinner";
 import CourseItem from "./CourseItem";
 import { getBootcamp, isLoading } from "../../redux/actions/bootcamps";
-import { unLoadReview } from "../../redux/actions/reviews";
+import { loadBootcampReview, unLoadReview } from "../../redux/actions/reviews";
 
 class Bootcamp extends React.Component {
   componentDidMount() {
@@ -15,8 +15,15 @@ class Bootcamp extends React.Component {
 
   render() {
     let bootcampProps = {};
+    let currentUserHasReview;
+
     if (this.props.bootcamp) {
       bootcampProps = this.props.bootcamp;
+      if (this.props.user) {
+        currentUserHasReview = bootcampProps.reviews.find(
+          (review) => review.user.toString() === this.props.user._id
+        );
+      }
     }
 
     const {
@@ -80,13 +87,26 @@ class Bootcamp extends React.Component {
               >
                 <i className="fas fa-comments"></i> Read Reviews
               </Link>
-              <Link
-                to="/add-review"
-                className="btn btn-light btn-block my-3"
-                onClick={() => unLoadReview()}
-              >
-                <i className="fas fa-pencil-alt"></i> Write a Review
-              </Link>
+
+              {currentUserHasReview ? (
+                <Link
+                  to="/add-review"
+                  className="btn btn-light btn-block my-3"
+                  onClick={() =>
+                    this.props.loadBootcampReview(currentUserHasReview)
+                  }
+                >
+                  <i className="fas fa-pencil-alt"></i> Modify Review
+                </Link>
+              ) : (
+                <Link
+                  to="/add-review"
+                  className="btn btn-light btn-block my-3"
+                  onClick={() => this.props.unLoadReview()}
+                >
+                  <i className="fas fa-pencil-alt"></i> Write a Review
+                </Link>
+              )}
               {website && (
                 <Link
                   to={website}
@@ -146,16 +166,19 @@ Bootcamp.propTypes = {
   bootcamp: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   isLoading: PropTypes.func.isRequired,
+  loadBootcampReview: PropTypes.func.isRequired,
   unLoadReview: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   bootcamp: state.bootcamps.bootcamp,
   loading: state.bootcamps.loading,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, {
   getBootcamp,
   isLoading,
   unLoadReview,
+  loadBootcampReview,
 })(Bootcamp);

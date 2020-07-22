@@ -36,7 +36,9 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/bootcamps/:id
 // @access Public
 exports.getBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findById(req.params.id).populate("courses");
+  const bootcamp = await Bootcamp.findById(req.params.id).populate(
+    "courses reviews"
+  );
 
   if (!bootcamp) {
     return next(

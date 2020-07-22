@@ -54,8 +54,22 @@ export const getReview = (reviewId) => async (dispatch) => {
   }
 };
 
-// /api/v1/reviews/:userId
 // Get reviews by user
+export const getUserReviews = (userId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/v1/reviews/users/${userId}`);
+
+    dispatch({
+      type: GET_REVIEWS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: REVIEW_ERROR,
+      payload: error.response,
+    });
+  }
+};
 
 // Add review for a bootcamp
 export const addReview = (bootcampId, formData, history) => async (
@@ -92,6 +106,7 @@ export const addReview = (bootcampId, formData, history) => async (
 };
 
 // Load review for the ReviewForm if it's going to be updated
+// Only used for the EditReviews Component
 export const loadReview = (reviewId) => (dispatch) => {
   dispatch({
     type: LOAD_REVIEW,
@@ -103,6 +118,15 @@ export const loadReview = (reviewId) => (dispatch) => {
 export const unLoadReview = () => (dispatch) => {
   dispatch({
     type: UNLOAD_REVIEW,
+  });
+};
+
+// Load Bootcamp Review when user wants to modify the review after watching the bootcamp
+// This makes the review load faster for the ReviewForm
+export const loadBootcampReview = (review) => (dispatch) => {
+  dispatch({
+    type: GET_REVIEW,
+    payload: { data: review },
   });
 };
 

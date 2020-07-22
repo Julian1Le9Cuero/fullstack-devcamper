@@ -112,6 +112,12 @@ BootcampSchema.virtual("courses", {
   foreignField: "bootcamp",
 });
 
+BootcampSchema.virtual("reviews", {
+  ref: "Review",
+  localField: "_id",
+  foreignField: "bootcamp",
+});
+
 BootcampSchema.pre("save", async function (next) {
   const loc = await geocoder.geocode(this.address);
 

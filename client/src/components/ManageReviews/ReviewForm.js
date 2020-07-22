@@ -34,7 +34,7 @@ class ReviewForm extends React.Component {
 
     const handleSubmit = (e) => {
       e.preventDefault();
-      console.log(this.state);
+
       if (review) {
         updateReview(review._id, this.state, history);
       } else {
@@ -49,13 +49,19 @@ class ReviewForm extends React.Component {
             <div className="card bg-white py-2 px-4">
               <div className="card-body">
                 <Link
-                  to="/bootcamp"
+                  to={`/bootcamp/${
+                    review ? review.bootcamp._id : bootcamp._id
+                  }`}
                   className="btn btn-link text-secondary my-3"
                 >
                   <i className="fas fa-chevron-left"></i> Bootcamp Info
                 </Link>
-                <h1 className="mb-2">DevWorks Bootcamp</h1>
-                <h3 className="text-primary mb-4">Write a Review</h3>
+                <h1 className="mb-2">
+                  {review ? review.bootcamp.name : bootcamp.name}
+                </h1>
+                <h3 className="text-primary mb-4">
+                  {review ? "Update" : "Write a"} Review
+                </h3>
                 <p>
                   You must have attended and graduated this bootcamp to review
                 </p>
@@ -99,7 +105,7 @@ class ReviewForm extends React.Component {
                   <div className="form-group">
                     <input
                       type="submit"
-                      value="Submit Review"
+                      value={review ? "Update Review" : "Submit Review"}
                       className="btn btn-dark btn-block"
                     />
                   </div>
@@ -122,6 +128,7 @@ ReviewForm.propTypes = {
 const mapStateToProps = (state) => ({
   user: state.auth.user,
   bootcamp: state.bootcamps.bootcamp,
+  review: state.reviews.review,
 });
 
 export default connect(mapStateToProps, { addReview, updateReview })(
