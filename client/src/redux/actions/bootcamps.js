@@ -12,11 +12,15 @@ import {
 import composeUrl from "../../utils/composeUrl";
 import { createAlert } from "./alert";
 import { loadUser } from "./auth";
+// let savedUrl;
 
 // Fetch all bootcamps
 export const getBootcamps = (filters, location) => async (dispatch) => {
   let url = "/api/v1/bootcamps?limit=4";
   if (filters) {
+    // if (savedUrl && filters.page) {
+    //   url = composeUrl(savedUrl, filters);
+    // }
     // Get bootcamps with filters if provided
     url = composeUrl(url, filters);
   } else if (location) {
@@ -35,6 +39,10 @@ export const getBootcamps = (filters, location) => async (dispatch) => {
       type: GET_BOOTCAMPS,
       payload: res.data,
     });
+
+    // if (url !== composeUrl(url, filters) &&  !filters.page && res.data.pagination.next && res.data.pagination.next) {
+    //   savedUrl = url
+    // }
   } catch (error) {
     dispatch({
       type: BOOTCAMP_ERROR,
