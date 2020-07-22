@@ -6,6 +6,7 @@ import {
   LOAD_USER,
   AUTH_ERROR,
   LOGOUT,
+  IS_LOADING,
 } from "../actions/types";
 
 const initialState = {
@@ -50,6 +51,11 @@ const auth = (state = initialState, action) => {
         loading: true,
         user: null,
         isAuthenticated: false,
+      };
+    case IS_LOADING:
+      return {
+        ...state,
+        loading: true,
       };
     default:
       return state;

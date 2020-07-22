@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { getBootcamp, isLoading } from "../../redux/actions/bootcamps";
-import CourseItem from "./CourseItem";
 import { connect } from "react-redux";
 import Spinner from "../Spinner/Spinner";
+import CourseItem from "./CourseItem";
+import { getBootcamp, isLoading } from "../../redux/actions/bootcamps";
+import { unLoadReview } from "../../redux/actions/reviews";
 
 class Bootcamp extends React.Component {
   componentDidMount() {
@@ -19,6 +20,7 @@ class Bootcamp extends React.Component {
     }
 
     const {
+      _id,
       name,
       description,
       averageCost,
@@ -59,7 +61,11 @@ class Bootcamp extends React.Component {
             {/* <!-- Sidebar --> */}
             <div className="col-md-4">
               {/* <!-- Image --> */}
-              <img src={`uploads/${photo}`} className="img-thumbnail" alt="" />
+              <img
+                src={`uploads/${photo}`}
+                className="img-thumbnail"
+                alt="bootcamp"
+              />
               {/* <!-- Rating --> */}
               <h1 className="text-center my-4">
                 Rating{" "}
@@ -68,10 +74,17 @@ class Bootcamp extends React.Component {
                 </span>
               </h1>
               {/* <!-- Buttons --> */}
-              <Link to="/reviews" className="btn btn-dark btn-block my-3">
+              <Link
+                to={`/reviews/${_id}`}
+                className="btn btn-dark btn-block my-3"
+              >
                 <i className="fas fa-comments"></i> Read Reviews
               </Link>
-              <Link to="/add-review" className="btn btn-light btn-block my-3">
+              <Link
+                to="/add-review"
+                className="btn btn-light btn-block my-3"
+                onClick={() => unLoadReview()}
+              >
                 <i className="fas fa-pencil-alt"></i> Write a Review
               </Link>
               {website && (
@@ -133,6 +146,7 @@ Bootcamp.propTypes = {
   bootcamp: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   isLoading: PropTypes.func.isRequired,
+  unLoadReview: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -140,4 +154,8 @@ const mapStateToProps = (state) => ({
   loading: state.bootcamps.loading,
 });
 
-export default connect(mapStateToProps, { getBootcamp, isLoading })(Bootcamp);
+export default connect(mapStateToProps, {
+  getBootcamp,
+  isLoading,
+  unLoadReview,
+})(Bootcamp);

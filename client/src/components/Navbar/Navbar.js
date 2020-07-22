@@ -24,6 +24,7 @@ const Navbar = ({ isAuthenticated, user, logout }) => {
       </li>
     </Fragment>
   );
+
   const authLinks = (
     <Fragment>
       <li className="nav-item dropdown">
@@ -42,9 +43,11 @@ const Navbar = ({ isAuthenticated, user, logout }) => {
               Manage Bootcamp
             </Link>
           )}
-          <Link className="dropdown-item" to="/manage-reviews">
-            Manage Reviews
-          </Link>
+          {user && user.role === "user" && (
+            <Link className="dropdown-item" to="/manage-reviews">
+              Manage Reviews
+            </Link>
+          )}
           <Link className="dropdown-item" to="/manage-account">
             Manage Account
           </Link>

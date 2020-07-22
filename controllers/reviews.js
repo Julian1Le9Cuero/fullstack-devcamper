@@ -49,6 +49,27 @@ exports.getReviews = asyncHandler(async (req, res, next) => {
   }
 });
 
+// @desc Get reviews by user
+// @route GET /api/v1/reviews/:userId
+// @access Public
+exports.getUserReviews = asyncHandler(async (req, res, next) => {
+  const reviews = await Review.find({ user: req.params.userId }).populate({
+    path: "bootcamp",
+    select: "name",
+  });
+
+  if (!reviews) {
+    return next(
+      new ErrorResponse(`Reviews not found for user ${req.params.userId}`, 404)
+    );
+  }
+
+  res.status(200).json({
+    success: true,
+    data: reviews,
+  });
+});
+
 // @desc Get single review
 // @route GET /api/v1/reviews/:id
 // @access Public

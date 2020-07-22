@@ -13,6 +13,7 @@ const {
   addReview,
   getReviews,
   getReview,
+  getUserReviews,
   updateReview,
   deleteReview,
 } = require("../controllers/reviews");
@@ -43,5 +44,10 @@ router
     checkOwnerShip(Review),
     deleteReview
   );
+
+// Route: /api/v1/reviews/:userId
+router
+  .route("/:userId")
+  .get(protect, authorize("admin", "user"), getUserReviews);
 
 module.exports = router;

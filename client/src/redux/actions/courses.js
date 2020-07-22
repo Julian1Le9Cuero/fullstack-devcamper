@@ -14,11 +14,11 @@ import composeUrl from "../../utils/composeUrl";
 
 // Get all courses from database or get courses by bootcamp
 export const getCourses = (bootcampId, filters) => async (dispatch) => {
-  let url;
+  let url = "/api/v1/courses";
   if (bootcampId) {
     url = `/api/v1/bootcamps/${bootcampId}/courses`;
   } else if (filters) {
-    url = composeUrl("/api/v1/courses", filters);
+    url = composeUrl(url, filters);
   }
 
   try {

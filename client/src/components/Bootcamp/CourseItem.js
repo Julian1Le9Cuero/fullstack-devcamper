@@ -1,5 +1,5 @@
 import React from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 
 const CourseItem = ({ course }) => {
   const {
@@ -36,6 +36,8 @@ const CourseItem = ({ course }) => {
   );
 };
 
-// CourseItem.propTypes = {};
+CourseItem.propTypes = {
+  course: PropTypes.object.isRequired,
+};
 
 export default CourseItem;
