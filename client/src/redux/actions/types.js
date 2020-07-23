@@ -26,3 +26,4 @@ export const REMOVE_REVIEW = "REMOVE_REVIEW";
 export const REVIEW_ERROR = "REVIEW_ERROR";
 export const LOAD_REVIEW = "LOAD_REVIEW";
 export const UNLOAD_REVIEW = "UNLOAD_REVIEW";
+export const USER_ERROR = "USER_ERROR";

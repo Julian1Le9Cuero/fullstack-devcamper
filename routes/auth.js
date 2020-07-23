@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 // Middlewares
-const { protect, authorize } = require("../middlewares/auth");
+const { protect } = require("../middlewares/auth");
 
 // Routes
 const {
@@ -26,20 +26,10 @@ router.post("/login", login);
 router.get("/me", protect, getAuthUser);
 
 // Route: /api/v1/auth/me/updatedetails
-router.patch(
-  "/me/updatedetails",
-  protect,
-  authorize("user"),
-  updateUserDetails
-);
+router.patch("/me/updatedetails", protect, updateUserDetails);
 
 // Route: /api/v1/auth/me/updatepassword
-router.patch(
-  "/me/updatepassword",
-  protect,
-  authorize("user"),
-  updateUserPassword
-);
+router.patch("/me/updatepassword", protect, updateUserPassword);
 
 // Route: /api/v1/auth/forgotpassword
 router.post("/forgotpassword", forgotPassword);

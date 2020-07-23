@@ -17,6 +17,10 @@ import CourseForm from "./components/ManageCourses/CourseForm";
 import ManageReviews from "./components/ManageReviews/ManageReviews";
 import ReviewForm from "./components/ManageReviews/ReviewForm";
 import BootcampReviews from "./components/BootcampReviews/BootcampReviews";
+import ManageAccount from "./components/ManageAccount/ManageAccount";
+import UpdatePassword from "./components/ManageAccount/UpdatePassword";
+import ForgotPassword from "./components/ManageAccount/ForgotPassword";
+import ResetPassword from "./components/ManageAccount/ResetPassword";
 
 import { loadUser } from "./redux/actions/auth";
 
@@ -64,6 +68,22 @@ class App extends React.Component {
               exact
               path="/bootcamps/reviews/:bootcampId"
               component={BootcampReviews}
+            />
+            <PrivateRoute
+              path="/manage-account"
+              exact
+              component={ManageAccount}
+            />
+            <PrivateRoute
+              path="/update-password"
+              exact
+              component={UpdatePassword}
+            />
+            <Route path="/forgot-password" exact component={ForgotPassword} />
+            <Route
+              path="/reset-password/:resettoken"
+              exact
+              component={ResetPassword}
             />
           </Switch>
         </BrowserRouter>
