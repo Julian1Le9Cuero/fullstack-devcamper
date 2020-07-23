@@ -1,6 +1,7 @@
 import axios from "axios";
-import { USER_ERROR, LOAD_USER } from "./types";
+import { USER_ERROR, LOGIN_SUCCESS } from "./types";
 import { createAlert } from "./alert";
+import { loadUser } from "./auth";
 
 // Update details (name and email)
 export const updateUserDetails = (formData) => async (dispatch) => {
@@ -11,17 +12,9 @@ export const updateUserDetails = (formData) => async (dispatch) => {
       },
     };
 
-    const res = await axios.patch(
-      "/api/v1/auth/me/updatedetails",
-      formData,
-      config
-    );
+    await axios.patch("/api/v1/auth/me/updatedetails", formData, config);
 
-    console.log(res.data);
-    dispatch({
-      type: LOAD_USER,
-      payload: res.data,
-    });
+    dispatch(loadUser());
     dispatch(createAlert("Your credentials have been updated.", "success"));
   } catch (error) {
     if (error.response.data.message) {
@@ -46,13 +39,8 @@ export const updateUserPassword = (formData) => async (dispatch) => {
       },
     };
 
-    const res = await axios.patch(
-      "/api/v1/auth/me/updatepassword",
-      formData,
-      config
-    );
+    await axios.patch("/api/v1/auth/me/updatepassword", formData, config);
 
-    console.log(res.data);
     dispatch(createAlert("Your password has been updated.", "success"));
   } catch (error) {
     if (error.response.data.message) {
@@ -78,13 +66,8 @@ export const forgotPassword = (email) => async (dispatch) => {
       },
     };
 
-    const res = await axios.post(
-      "/api/v1/auth/forgotpassword",
-      { email },
-      config
-    );
+    await axios.post("/api/v1/auth/forgotpassword", { email }, config);
 
-    console.log(res.data);
     dispatch(
       createAlert(
         "We have sent you an email, you have 10 minutes to update your password.",
@@ -116,9 +99,20 @@ export const resetPassword = (formData, history) => async (dispatch) => {
       },
     };
 
-    await axios.put("/api/v1/auth/resetpassword/:resettoken", formData, config);
+    const { password, resettoken } = formData;
+
+    const res = await axios.put(
+      `/api/v1/auth/resetpassword/${resettoken}`,
+      { password },
+      config
+    );
 
     dispatch(createAlert("Password has been reset.", "success", 2000));
+
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: res.data.token,
+    });
 
     setTimeout(() => {
       history.push("/bootcamps");

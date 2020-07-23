@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import Alert from "../Alert/Alert";
 import { updateUserDetails } from "../../redux/actions/users";
 
 const ManageAccount = ({ updateUserDetails, user }) => {
@@ -34,6 +35,7 @@ const ManageAccount = ({ updateUserDetails, user }) => {
         <div className="col-md-8 m-auto">
           <div className="card bg-white py-2 px-4">
             <div className="card-body">
+              <Alert />
               <h1 className="mb-2">Manage Account</h1>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
