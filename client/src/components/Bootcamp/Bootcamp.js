@@ -88,7 +88,8 @@ class Bootcamp extends React.Component {
                 <i className="fas fa-comments"></i> Read Reviews
               </Link>
 
-              {currentUserHasReview ? (
+              {!this.props.user ||
+              this.props.user.role !== "user" ? null : currentUserHasReview ? (
                 <Link
                   to="/add-review"
                   className="btn btn-light btn-block my-3"

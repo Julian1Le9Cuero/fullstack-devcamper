@@ -23,7 +23,7 @@ class BootcampForm extends React.Component {
 
   componentDidMount() {
     // Get recently added/updated bootcamp or bootcamp from database
-    const bootcamp = this.props.bootcamp || this.props.user.bootcamps[0];
+    const bootcamp = this.props.user.bootcamps[0];
     const bootcampDetails = {};
 
     // Fill the form with previous data if user has bootcamp
@@ -57,7 +57,7 @@ class BootcampForm extends React.Component {
     const { addBootcamp, history, user, updateBootcamp } = this.props;
 
     // Get recently added/updated bootcamp or bootcamp from database
-    const bootcamp = this.props.bootcamp || user.bootcamps[0];
+    const bootcamp = user.bootcamps[0];
 
     const handleChange = (e) => {
       this.setState({ ...this.state, [e.target.name]: e.target.value });
@@ -295,12 +295,10 @@ BootcampForm.propTypes = {
   addBootcamp: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   updateBootcamp: PropTypes.func.isRequired,
-  bootcamp: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
-  bootcamp: state.bootcamps.bootcamp,
 });
 
 export default connect(mapStateToProps, {

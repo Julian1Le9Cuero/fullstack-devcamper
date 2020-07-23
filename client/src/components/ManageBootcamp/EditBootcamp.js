@@ -14,14 +14,13 @@ import {
 const EditBootcamp = ({
   user,
   deleteBootcamp,
-  bootcamp,
   uploadBootcampPhoto,
   uploadedPhoto,
 }) => {
   const [file, setFile] = useState("");
   const [fileName, setFileName] = useState("Add Bootcamp Image");
 
-  const userBootcamp = user.bootcamps[0] || bootcamp;
+  const userBootcamp = user.bootcamps[0];
 
   const handleChange = (e) => {
     setFile(e.target.files[0]);
@@ -102,15 +101,12 @@ const EditBootcamp = ({
 
 EditBootcamp.propTypes = {
   user: PropTypes.object.isRequired,
-  bootcamp: PropTypes.object.isRequired,
   deleteBootcamp: PropTypes.func.isRequired,
   uploadBootcampPhoto: PropTypes.func.isRequired,
-  uploadedPhoto: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
-  bootcamp: state.bootcamps.bootcamp,
   uploadedPhoto: state.bootcamps.uploadedPhoto,
 });
 

@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import PropTypes from "prop-types";
 
 const AddCourse = () => {
   return (
@@ -21,7 +20,5 @@ const AddCourse = () => {
     </section>
   );
 };
-
-// AddCourse.propTypes = {};
 
 export default AddCourse;

@@ -9,14 +9,12 @@ import EditCourses from "./EditCourses";
 
 import { getCourses } from "../../redux/actions/courses";
 
-const ManageCourses = ({ user, loading, getCourses, bootcamp, courses }) => {
+const ManageCourses = ({ user, loading, getCourses, courses }) => {
   useEffect(() => {
     if (user.bootcamps[0]) {
       getCourses(user.bootcamps[0]._id);
-    } else if (bootcamp) {
-      getCourses(bootcamp._id);
     }
-  }, [getCourses, user.bootcamps, bootcamp]);
+  }, [getCourses, user.bootcamps]);
 
   if (user && user.role === "user") {
     return <Redirect to="/bootcamps" />;
@@ -40,7 +38,6 @@ ManageCourses.propTypes = {
 const mapStateToProps = (state) => ({
   user: state.auth.user,
   loading: state.auth.loading,
-  bootcamp: state.bootcamps.bootcamp,
   courses: state.courses.courses,
 });
 

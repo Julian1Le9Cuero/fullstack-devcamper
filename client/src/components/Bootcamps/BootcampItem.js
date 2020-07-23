@@ -13,7 +13,7 @@ const BootcampItem = ({ bootcamp, uploadedPhoto }) => {
               uploadedPhoto ? `uploads/${uploadedPhoto}` : `uploads/${photo}`
             }
             className="card-img"
-            alt="..."
+            alt="bootcamp"
           />
         </div>
         <div className="col-md-8">

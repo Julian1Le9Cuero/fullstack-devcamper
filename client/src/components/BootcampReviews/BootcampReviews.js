@@ -22,12 +22,18 @@ class BootcampReviews extends React.Component {
   }
 
   render() {
-    const { bootcamp, bootcampLoading, reviewsLoading, reviews } = this.props;
+    const {
+      bootcamp,
+      bootcampLoading,
+      reviewsLoading,
+      reviews,
+      user,
+    } = this.props;
     let currentUserHasReview;
 
-    if (bootcamp && bootcamp.reviews.length && this.props.user) {
+    if (bootcamp && bootcamp.reviews.length && user) {
       currentUserHasReview = bootcamp.reviews.find(
-        (review) => review.user.toString() === this.props.user._id
+        (review) => review.user.toString() === user._id
       );
     }
 
@@ -41,11 +47,7 @@ class BootcampReviews extends React.Component {
           <div className="row">
             {/* Main col  */}
             <div className="col-md-8">
-              <Link
-                to={`/bootcamp/${_id}`}
-                target="_blank"
-                className="btn btn-secondary my-3"
-              >
+              <Link to={`/bootcamp/${_id}`} className="btn btn-secondary my-3">
                 <i className="fas fa-chevron-left"></i> Bootcamp Info
               </Link>
               <h1 className="mb-4">{name} Reviews</h1>
@@ -53,7 +55,7 @@ class BootcampReviews extends React.Component {
               {reviewsLoading ? (
                 <Spinner />
               ) : reviews.length === 0 ? (
-                <h2>This bootcamp has no reviews yet.</h2>
+                <h4>This bootcamp has no reviews yet.</h4>
               ) : (
                 reviews.map((review) => (
                   <ReviewItem key={review._id} review={review} />
@@ -70,7 +72,7 @@ class BootcampReviews extends React.Component {
                 </span>
               </h1>
               {/*  Buttons */}
-              {currentUserHasReview ? (
+              {!user || user.role !== "user" ? null : currentUserHasReview ? (
                 <Link
                   to="/add-review"
                   className="btn btn-primary btn-block my-3"

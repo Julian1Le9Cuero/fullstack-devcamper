@@ -76,16 +76,14 @@ export const addBootcamp = (formData, history) => async (dispatch) => {
         "Content-Type": "application/json",
       },
     };
-    const res = await axios.post("/api/v1/bootcamps", formData, config);
+
+    await axios.post("/api/v1/bootcamps", formData, config);
 
     dispatch({
       type: IS_LOADING,
     });
 
-    dispatch({
-      type: ADD_BOOTCAMP,
-      payload: res.data,
-    });
+    dispatch(loadUser());
 
     history.push("/manage-bootcamp");
   } catch (error) {

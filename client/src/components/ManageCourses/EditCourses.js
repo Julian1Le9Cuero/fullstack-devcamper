@@ -10,9 +10,9 @@ import EditCoursesItems from "./EditCoursesItems";
 
 import { unLoadCourse } from "../../redux/actions/courses";
 
-const EditCourses = ({ courses, user, bootcamp, unLoadCourse }) => {
+const EditCourses = ({ courses, user, unLoadCourse }) => {
   // Get user bootcamp from db or get the recently added bootcamp
-  const userBootcamp = user.bootcamps[0] || bootcamp;
+  const userBootcamp = user.bootcamps[0];
 
   return (
     <section className="container mt-5">
@@ -51,14 +51,12 @@ const EditCourses = ({ courses, user, bootcamp, unLoadCourse }) => {
 EditCourses.propTypes = {
   courses: PropTypes.array.isRequired,
   user: PropTypes.object.isRequired,
-  bootcamp: PropTypes.object.isRequired,
   unLoadCourse: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   courses: state.courses.courses,
   user: state.auth.user,
-  bootcamp: state.bootcamps.bootcamp,
 });
 
 export default connect(mapStateToProps, { unLoadCourse })(EditCourses);

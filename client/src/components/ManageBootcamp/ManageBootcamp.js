@@ -7,14 +7,14 @@ import AddBootcamp from "./AddBootcamp";
 import EditBootcamp from "./EditBootcamp";
 import Spinner from "../Spinner/Spinner";
 
-const ManageBootcamp = ({ user, loading, bootcamp }) => {
+const ManageBootcamp = ({ user, loading }) => {
   if (user && user.role === "user") {
     return <Redirect to="/bootcamps" />;
   }
 
   return loading ? (
     <Spinner />
-  ) : user.bootcamps.length > 0 || bootcamp ? (
+  ) : user.bootcamps.length > 0 ? (
     <EditBootcamp />
   ) : (
     <AddBootcamp />
@@ -24,13 +24,11 @@ const ManageBootcamp = ({ user, loading, bootcamp }) => {
 ManageBootcamp.propTypes = {
   user: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  bootcamp: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
   loading: state.auth.loading,
-  bootcamp: state.bootcamps.bootcamp,
 });
 
 export default connect(mapStateToProps)(ManageBootcamp);
